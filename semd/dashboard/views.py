@@ -9,9 +9,9 @@ from django.contrib import messages
 from .models import Semd
 
 def index(request):
-    lines = [["Blue", 2],["orange", 4],["green", 3]]
+    status = Semd.get_semd_by_status(Semd)
     data = {
-        "lines": lines
+        "status": status,
     }
     return render(request, "dashboard/index.html", context=data)
 

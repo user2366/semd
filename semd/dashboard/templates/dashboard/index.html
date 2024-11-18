@@ -36,8 +36,15 @@
             flex-wrap: wrap;
             width: 1000px;
         }
-
+        .title {
+            margin-top: 50px;
+        }
         .el1 {
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             width: 500px;
             height: 500px;
         }
@@ -56,88 +63,58 @@
             height: 500px;
             background-color: burlywood;
         }
+        .canvas {
+            margin: auto;
+        }
 
     </style>
      
     <body>
         <div class="nav">
-                <h2>Аналитики по СЭМДам</h2>
+                <h2>Аналитика по ЛПУ</h2>
         </div>
-
         <container class="dashboard">
             <div class="el1">
-                <canvas id="myChart"></canvas>
+                <h1 class="title">По статусу документов</h1>
+                <canvas class="canvas" id="myChart"></canvas>
             </div>
             <div class="el2"></div>
             <div class="el3"></div>
             <div class="el4"></div>
         </container>
-
-        
      
-<!--
-        <div class="col-xs-12 text-center">
-            <h2>По статусу</h2>
-        </div>
-            <div id="donut-chart"></div>
-        <script>
-            let chart = bb.generate({
-                data: {
-                    columns: [
-                        [label:"", "Blue", 12],
-                        ["orange", 50],
-                        ["green", 38],
-                        ["red", 36],
-                    ],
-                    type: "donut",
-                    onclick: function (d, i) {
-                        console.log("onclick", d, i);
-                    },
-                    onover: function (d, i) {
-                        console.log("onover", d, i);
-                    },
-                    onout: function (d, i) {
-                        console.log("onout", d, i);
-                    },
-                },
-                donut: {
-                    title: "СЭМД",
-                },
-                bindto: "#donut-chart",
-            });
-        </script>
--->
     <script type="text/javascript">
+
         $(function () {
             var data = [
             {
-                value: 50,
+                value: {{status.1}},
                 color:"#F7464A",
-                highlight: "#FF5A5E",
+                highlight: "#F7464A",
                 label: "Ошибка регистрации в РЭМД"
             },
             {
-                value: 250,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
+                value: {{status.0}},
+                color: "#32CD32",
+                highlight: "#32CD32",
                 label: "Зарегистрирован в РЭМД"
             },
             {
-                value: 30,
-                color: "#FDB45C",
-                highlight: "#FFC870",
+                value: {{status.2}},
+                color: "#FFD700",
+                highlight: "#FFD700",
                 label: "Отправлен на регистрацию в РЭМД"
             },
             {
-                value: 100,
-                color: "#FDB45C",
-                highlight: "#FFC870",
+                value: {{status.3}},
+                color: "#FF8C00",
+                highlight: "#FF8C00",
                 label: "Подписан. Не отправлен на регистрацию в РЭМД"
             },
             {
-                value: 100,
-                color: "#FDB45C",
-                highlight: "#FFC870",
+                value: {{status.4}},
+                color: "#696969",
+                highlight: "#696969",
                 label: "Системные ошибки"
             }
         ]
@@ -148,8 +125,6 @@
             var ctx = document.getElementById("myChart").getContext('2d');
             var myPieChart = new Chart(ctx).Pie(data,option); //'Line' defines type of the chart.
         });
-
-
     </script>
     </body>
 </html>

@@ -19,3 +19,16 @@ class Semd(models.Model):
 
     def get_absolute_url(self):
         return reverse("semd_detail", kwargs={"pk": self.pk})
+    
+    def get_semd_by_status(self):
+        semd_status = {
+            0: "Зарегистрирован в РЭМД",
+            1: "Ошибка регистрации в РЭМД",
+            2: "Отправлен на регистрацию в РЭМД",
+            3: "Подписан. Не отправлен на регистрацию в РЭМД",
+            4: "Синхронная ошибка при отправке от внешней ИС в РЭМД",
+        }
+        status = []
+        for i in range(5):
+            status.append(len(self.objects.filter(status=semd_status[i])))
+        return status
