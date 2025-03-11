@@ -3,12 +3,65 @@ from django.urls import reverse
 
 
 class Semd(models.Model):
-    otd = models.CharField(max_length=255, verbose_name="Отделение", default='')
-    vid_semd = models.CharField(max_length=255, verbose_name="Вид СЭМДа", default='')
-    personal = models.CharField(max_length=255, verbose_name="Сотрудник", default='')
-    lid = models.CharField(max_length=255, verbose_name="Локальный идентификатор документа", blank=True)
-    status = models.CharField(max_length=255, verbose_name="Статус передачи", default='')
-    reg_error = models.CharField(max_length=4000, verbose_name="Ошибка", blank=True)
+    '''
+    id              = models.IntegerField(
+                        verbose_name='№', 
+                        primary_key=True, 
+                        unique=True, 
+                        blank=False, 
+                        auto_created=True
+    )
+    mo_name         = models.CharField(
+                        verbose_name='Наименование МО',
+                        max_length=255,
+                        default=''
+    )
+    deportament     = models.CharField(
+                        verbose_name='Структурное подразделение МО',
+                        max_length=255,
+                        default=''
+    )
+    oid_deportament = models.CharField(
+                        verbose_name='OID Структурного подразделения МО',
+                        max_length=255,
+                        default=''
+    )
+    semd            = models.CharField(
+                        verbose_name='Вид СЭМД',
+                        max_length=255,
+                        default=''
+    )
+    semd_version    = models.CharField(
+                        verbose_name='Версия СЭМД',
+                        max_length=255,
+                        default=''
+    )
+    fio_pacient     = models.CharField(
+                        verbose_name='ФИО пациента',
+                        max_length=255,
+                        blank=False
+    )
+    birthdate       = models.DateField()
+    Дата рождения;
+    СНИЛС;
+    Сотрудник, сформировавший СЭМД;
+    Номер документа в региональной МИС;
+    Локальный идентификатор документа;
+    Дата создания СЭМД;
+    Дата отправки на регистрацию в РЭМД;
+    Дата отказа регистрации в РЭМД;
+    Дата и время регистрации в РЭМД;
+    Статус передачи СЭМД;
+    Статус подписания;
+    Ошибки
+    '''
+
+    otd         = models.CharField(max_length=255, verbose_name="Отделение", default='')
+    vid_semd    = models.CharField(max_length=255, verbose_name="Вид СЭМДа", default='')
+    personal    = models.CharField(max_length=255, verbose_name="Сотрудник", default='')
+    lid         = models.CharField(max_length=255, verbose_name="Локальный идентификатор документа", blank=True)
+    status      = models.CharField(max_length=255, verbose_name="Статус передачи", default='')
+    reg_error   = models.CharField(max_length=4000, verbose_name="Ошибка", blank=True)
 
     class Meta:
         verbose_name = "СЭМД"
