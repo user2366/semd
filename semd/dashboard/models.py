@@ -1,66 +1,38 @@
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 
 
 class Semd(models.Model):
-    '''
-    id              = models.IntegerField(
-                        verbose_name='№', 
-                        primary_key=True, 
-                        unique=True, 
-                        blank=False, 
-                        auto_created=True
-    )
-    mo_name         = models.CharField(
-                        verbose_name='Наименование МО',
-                        max_length=255,
-                        default=''
-    )
-    deportament     = models.CharField(
-                        verbose_name='Структурное подразделение МО',
-                        max_length=255,
-                        default=''
-    )
-    oid_deportament = models.CharField(
-                        verbose_name='OID Структурного подразделения МО',
-                        max_length=255,
-                        default=''
-    )
-    semd            = models.CharField(
-                        verbose_name='Вид СЭМД',
-                        max_length=255,
-                        default=''
-    )
-    semd_version    = models.CharField(
-                        verbose_name='Версия СЭМД',
-                        max_length=255,
-                        default=''
-    )
-    fio_pacient     = models.CharField(
-                        verbose_name='ФИО пациента',
-                        max_length=255,
-                        blank=False
-    )
-    birthdate       = models.DateField()
-    Дата рождения;
-    СНИЛС;
-    Сотрудник, сформировавший СЭМД;
-    Номер документа в региональной МИС;
-    Локальный идентификатор документа;
-    Дата создания СЭМД;
-    Дата отправки на регистрацию в РЭМД;
-    Дата отказа регистрации в РЭМД;
-    Дата и время регистрации в РЭМД;
-    Статус передачи СЭМД;
-    Статус подписания;
-    Ошибки
-    '''
-
+    semd_status = {
+            0: "Зарегистрирован в РЭМД",
+            1: "Отказано в регистрации",
+            2: "Отправлен на регистрацию",
+            3: "Не отправлен на регистрацию в РЭМД",
+            4: "Синхронная ошибка при отправке от внешней ИС в РЭМД",
+        }
+    month_str = {
+        1: "январь",
+        2: "февраль",
+        3: "март",
+        4: "апрель",
+        5: "май",
+        6: "июнь",
+        7: "июль",
+        8: "август",
+        9: "сентябрь",
+        10: "октябрь",
+        11: "ноябрь",
+        12: "декабрь",
+    }
     otd         = models.CharField(max_length=255, verbose_name="Отделение", default='')
     vid_semd    = models.CharField(max_length=255, verbose_name="Вид СЭМДа", default='')
     personal    = models.CharField(max_length=255, verbose_name="Сотрудник", default='')
     lid         = models.CharField(max_length=255, verbose_name="Локальный идентификатор документа", blank=True)
+    semd_date   = models.DateField(verbose_name='Дата регистрации', blank=True, null=True)
     status      = models.CharField(max_length=255, verbose_name="Статус передачи", default='')
+    month       = models.IntegerField(verbose_name='Месяц', blank=True, null=True)
+    year        = models.IntegerField(verbose_name='Год', blank=True, null=True)
     reg_error   = models.CharField(max_length=4000, verbose_name="Ошибка", blank=True)
 
     class Meta:
@@ -73,15 +45,48 @@ class Semd(models.Model):
     def get_absolute_url(self):
         return reverse("semd_detail", kwargs={"pk": self.pk})
     
-    def get_semd_by_status(self):
-        semd_status = {
-            0: "Зарегистрирован в РЭМД",
-            1: "Ошибка регистрации в РЭМД",
-            2: "Отправлен на регистрацию в РЭМД",
-            3: "Подписан. Не отправлен на регистрацию в РЭМД",
-            4: "Синхронная ошибка при отправке от внешней ИС в РЭМД",
-        }
+    def get_all_month(self):
+        return self.objects.order_by('month').values_list('month', flat=True).distinct()
+    
+    def get_all_year(self):
+        return self.objects.values_list('year', flat=True).distinct()
+    
+    def get_semd_by_status(self, month, year):
         status = []
         for i in range(5):
-            status.append(len(self.objects.filter(status=semd_status[i])))
+            status.append(len(self.objects.filter(status=self.semd_status[i], month=month, year=year)))
+        status.append(self.objects.filter(month=month, year=year).count())
         return status
+
+    def get_all_semd(self):
+        return self.objects.count()
+
+    def get_list_of_otd(self):
+        return self.objects.values_list('otd', flat=True).distinct()
+    
+    def get_semd_by_otd(self, otd, month, year):
+        data = {       
+                'all_semd': self.objects.filter(otd=otd, month=month, year=year).count(),
+                'registered': self.objects.filter(otd=otd, status=self.semd_status[0], month=month, year=year).count(),
+                'not_registered': self.objects.filter(otd=otd, status=self.semd_status[1], month=month, year=year).count(),
+                'sent': self.objects.filter(otd=otd, status=self.semd_status[2], month=month, year=year).count(),
+                'not_sent': self.objects.filter(otd=otd, status=self.semd_status[3], month=month, year=year).count(),
+                'error': self.objects.filter(otd=otd, status=5, month=month, year=year).count(),
+                
+        }
+        return data
+    def get_error_semd(self, otd, month, year):
+        data = {
+                'error_module': self.objects.filter(otd=otd, reg_error__contains='Ошибка модуля', month=month, year=year).count(),
+                'error_registration': self.objects.filter(otd=otd, reg_error__contains='Документ с идентификатором', month=month, year=year).count(),
+                'error_dul': self.objects.filter(otd=otd,reg_error__in=['не соответствует данным ГИП', 'Указанное значение [Имя пациента]', 'Пол пациента в ЭМД' ], month=month, year=year).count(),
+                'error_version': self.objects.filter(otd=otd, reg_error__contains='запрещена регистрация новых версий', month=month, year=year).count(),
+                'error_sign': self.objects.filter(otd=otd, reg_error__contains='Несоответствие данных подписанта в запросе и в сертификате', month=month, year=year).count(),
+                'error_technical': self.objects.filter(otd=otd, reg_error__contains='Справочник OID', month=month, year=year).count(),
+                'error_else': self.objects.filter(otd=otd, reg_error__contains='Справочник OID', month=month, year=year).count(),
+                'all_register' : self.objects.filter(otd=otd, status=self.semd_status[0], month=month, year=year).count(),
+                'all_items' : self.objects.filter(otd=otd, month=month, year=year).count(),
+        }
+       
+        return data
+    

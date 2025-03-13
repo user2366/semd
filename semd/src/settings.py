@@ -115,7 +115,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # Основной каталог для статических файлов
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 20  # 20 МБ размер загружаемого файла
+
+DATE_INPUT_FORMATS = ['%d.%m.%Y']
