@@ -32,7 +32,7 @@ def index(request, q_month=datetime.now().month, q_year=datetime.now().year):
     
     data = {
         "status": status,
-        "data": semd_by_otd,
+        #"data": semd_by_otd,
         "error": error_by_otd,
         "month": list_month,
         "year": year,
@@ -82,10 +82,10 @@ def upload_csv(request):
                 is_present = Semd.objects.filter(lid=fields[11]).exists()
                 if not is_present:
                     try:
-                        if fields[15] == '':
+                        if fields[13] == '':
                             correct_format = None
                         else:
-                            date_object = datetime.strptime(fields[15], '%d.%m.%Y %H:%M')
+                            date_object = datetime.strptime(fields[13], '%d.%m.%Y')
                             correct_format = date_object.date().isoformat() 
                             month_number = date_object.month
                             year_number = date_object.year

@@ -50,13 +50,22 @@ class Semd(models.Model):
     
     def get_all_year(self):
         return self.objects.values_list('year', flat=True).distinct()
-    
+
     def get_semd_by_status(self, month, year):
-        status = []
-        for i in range(5):
-            status.append(len(self.objects.filter(status=self.semd_status[i], month=month, year=year)))
-        status.append(self.objects.filter(month=month, year=year).count())
-        return status
+        data = {}
+        data["all"]                         = len(self.objects.filter(month=month, year=year))
+        data["all_last_month"]              = 100 - (len(self.objects.filter(month=month-1, year=year))/len(self.objects.filter(month=month, year=year)))*100 if len(self.objects.filter(month=month, year=year)) != 0 else 0
+        data["registered"]                  = len(self.objects.filter(status=self.semd_status[0], month=month, year=year))
+        data["registered_last_month"]       = 100 - (len(self.objects.filter(status=self.semd_status[0], month=month-1, year=year))/len(self.objects.filter(status=self.semd_status[0], month=month, year=year)))*100 if len(self.objects.filter(status=self.semd_status[0], month=month, year=year)) != 0 else 0
+        data["not_registered"]              = len(self.objects.filter(status=self.semd_status[1], month=month, year=year)) 
+        data["not_registered_last_month"]   = 100 - (len(self.objects.filter(status=self.semd_status[1], month=month-1, year=year))/len(self.objects.filter(status=self.semd_status[1], month=month, year=year)))*100 if len(self.objects.filter(status=self.semd_status[1], month=month, year=year)) != 0 else 0
+        data["sent"]                        = len(self.objects.filter(status=self.semd_status[2], month=month, year=year))
+        data["sent_last_month"]             = 100 - (len(self.objects.filter(status=self.semd_status[2], month=month-1, year=year))/len(self.objects.filter(status=self.semd_status[2], month=month, year=year)))*100 if len(self.objects.filter(status=self.semd_status[2], month=month, year=year)) != 0 else 0
+        data["not_sent"]                    = len(self.objects.filter(status=self.semd_status[3], month=month, year=year))
+        data["not_sent_last_month"]         = 100 - (len(self.objects.filter(status=self.semd_status[3], month=month-1, year=year))/len(self.objects.filter(status=self.semd_status[3], month=month, year=year)))*100 if len(self.objects.filter(status=self.semd_status[3], month=month, year=year)) != 0 else 0
+        data["error"]                       = len(self.objects.filter(status=self.semd_status[4], month=month, year=year))
+        data["error_last_month"]            = 100 - (len(self.objects.filter(status=self.semd_status[4], month=month-1, year=year))/len(self.objects.filter(status=self.semd_status[4], month=month, year=year)))*100 if len(self.objects.filter(status=self.semd_status[4], month=month, year=year)) != 0 else 0
+        return data
 
     def get_all_semd(self):
         return self.objects.count()
