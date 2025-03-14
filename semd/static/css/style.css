@@ -1,0 +1,238 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    /*font-weight: <weight>;*/
+    font-style: normal;
+}
+:root{
+    /* ===== Colors ===== */
+    --body-color: #F5F5F5;
+    --sidebar-color: #FFF;
+    --primary-color: #695CFE;
+    --primary-green: #94E9B9;
+    --primary-color-light: #F6F5FF;
+    --toggle-color: #DDD;
+    --text-color: rgb(42, 53, 71);
+
+    /* ====== Transition ====== */
+    --tran-03: all 0.2s ease;
+    --tran-03: all 0.3s ease;
+    --tran-04: all 0.4s ease;
+    --tran-05: all 0.5s ease;
+
+    /* ====== Shadow =========  */
+    --box-shadow: rgba(169, 184, 200, 0.15) 0px 3px 9px 0px;
+}
+
+body{
+    min-height: 100vh;
+    background-color: var(--body-color);
+
+    transition: var(--tran-05);
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 97vh;
+}
+
+/*=======NAVBAR=======*/
+
+.navbar {
+    min-width: 10%;
+    background-color: var(--sidebar-color);
+    box-shadow: var(--box-shadow);
+}
+
+.navbar__title {
+    margin: 20px;
+    padding-left: 10px;
+}
+
+li {
+    margin: 10px;
+    list-style-type: none;
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+a {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--text-color);
+
+}
+
+.navbar__body-list-span {
+    padding-left: 10px;
+    padding-top: 5px;
+    min-height: 25px;
+}
+
+/*=======NAVBAR_CLOSE=======*/
+
+/*=======BODY===============*/
+
+.body {
+    min-width: 80%;
+    padding-left: 50px;
+    padding-right: 150px;
+}
+/*
+.body__head {
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    max-height: 80px;
+
+}
+
+.body__head-month {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-right: 15px;
+    border: 1px solid #000;
+    border-radius: 7px;
+    background-color: var(--sidebar-color);
+}
+
+.body__head-month-title {
+    margin: 10px;
+}
+*/
+/* */
+.body__head {
+    display: flex;
+    
+    padding: 10px;
+    /*background-color: #f8f9fa;*/
+    /*border-bottom: 1px solid #dee2e6;*/
+}
+
+/* Контейнер для месяца */
+.body__head-month {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+/* Ссылка на месяц */
+.body__head-month-link {
+    display: block;
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+/* Активная ссылка */
+.body__head-month-link.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Название месяца */
+.body__head-month-title {
+    margin-left: 10px;
+    font-weight: bold;
+    color: #6c757d;
+}
+
+/* Стили для активного состояния */
+.body__head-month-link:hover {
+    background-color: #e9ecef;
+}
+
+/* Стили для ошибок */
+.body__head-month-link.error {
+    border-color: #dc3545;
+    color: #dc3545;
+} 
+.body__container-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.body__container-box-element {
+    background-color: var(--sidebar-color);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    min-height: 100px;
+    min-width: 200px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+/*    align-items: center;*/
+    
+}
+
+.body__container-box-element-value{
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.body__container-box-element-value-percent {
+    background-color: var(--primary-green);
+    padding: 0 5px;
+    border-radius: 8px;
+}
+
+.body__container-box-element-title {
+    font-size: 12px;
+    color: var(--toggle-color);
+}
+
+.body__container-box-top-diagrams {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 50px;
+}
+
+.body__container-box-top-diagrams-element {
+    min-width: 380px;
+    min-height: 300px;
+    background-color: var(--sidebar-color);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+}
+
+.body__container-box-center {
+    margin-top: 25px;
+    background-color: var(--sidebar-color);
+    box-shadow: var(--box-shadow);
+    border-radius: 10px;
+    width: 100%;
+    min-height: 300px;
+}
+table {
+    width: 100%; 
+    border-collapse: collapse;
+}
+table td {
+    padding: 8px 12px;
+}
+table thead tr {
+    font-weight: bold; 
+    border-top: 1px solid #e8e9eb;
+}
+table tr {
+    border-bottom: 1px solid #e8e9eb;
+}
+table tbody tr:hover {
+    background: #e8f6ff;
+}
+table tr td p {
+    margin-left: 50px;
+}
